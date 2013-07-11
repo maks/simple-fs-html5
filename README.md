@@ -3,6 +3,8 @@ simple-fs
 
 A [HTML5 Filesystem](http://www.w3.org/TR/file-system-api/) implementation of the simple-stream and continuable based fs interface for js-git.
 
+## ==== Currently NOTHING WORKS !! Come back later... ====
+
 ## File System Interface
 
 This module implements the following functions from the fs interface which is described in detail at <https://github.com/creationix/js-git/blob/master/specs/fs.md>
