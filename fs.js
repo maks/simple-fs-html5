@@ -18,24 +18,36 @@ exports.rmdir = rmdir;
 exports.mkdir = mkdir;
 exports.rename = rename;
 
-function getFS(callback) {
-    window.requestFileSystem  = window.requestFileSystem || window.webkitRequestFileSystem;
-    window.requestFileSystem(window.PERSISTENT, Math.pow(2, 30) /* 1GB */, 
-    function(fileSystem) {
-        callback(null, fileSystem);
-    }, 
-    function (fileError) {
-        callback(fileError, null);
-    });
-}
+var fsdir;
+var rootdir;
 
-function chroot(root) {
-  
+function chroot(webfs, root, callback) {
+    fs = webfs;
+    if (root === '/') {
+        rootdir = fs.root;
+        callback(err, fs.root);
+    } else {
+        webfs.root.getDirectory(root, {}, function(dirEntry) {
+            rootdir = dirEntry;
+            callback(null, dirEntry);
+        }, function(err) {
+            callback(err, null);
+        });
+    }
 }
 
 // Given a path, return a continuable for the stat object.
 function stat(path, callback) {
-  
+    rootDir.getFile(path, {}, function(fileEntry) {
+        fileEntry.getMetadata(function(metaData) {
+            callback(null, {
+                size: metaData.size,
+                mtime: metaData.modificationTime.getTime()
+            });
+        }, function(err) {
+            callback(err);
+        });        
+    }
 }
 
 function read(path, encoding, callback) {
