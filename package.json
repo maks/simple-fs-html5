@@ -1,0 +1,26 @@
+{
+  "name": "simple-fs-html5",
+  "version": "0.0.1",
+  "description": "A HTML5 FS implementation of the simple-stream and continuable based fs interface for js-git.",
+  "main": "fs.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/maks/simple-fs-html5.git"
+  },
+  "keywords": [
+    "simple-stream",
+    "continuable",
+    "js-git",
+    "fs",
+    "interface"
+  ],
+  "author": "Maksim Lin <maks@manichord.com>",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/maks/simple-fs-html5/issues"
+  }
+}

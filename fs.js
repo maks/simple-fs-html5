@@ -18,8 +18,7 @@ exports.rmdir = rmdir;
 exports.mkdir = mkdir;
 exports.rename = rename;
 
-var fsdir;
-var rootdir;
+var fs;
 
 function chroot(webfs, root, callback) {
     fs = webfs;
@@ -47,7 +46,7 @@ function stat(path, callback) {
         }, function(err) {
             callback(err);
         });        
-    }
+    });
 }
 
 function read(path, encoding, callback) {
@@ -69,17 +68,28 @@ function readStream(path, options, callback) {
   }
   if (!callback) return readStream.bind(this, path, options);
   
-  var file, emit;
+  var entry, emit;
   
   getFS().root.getFile(path, {}, function (fileEntry) {    
-    file = fileEntry;
+    entry = fileEntry;
     callback(null, { read: fileRead, abort: fileAbort });
-  }, errorHandler);
+  }, errorHandlerTodo);
   
   function fileRead(readCallback) {
-      if (!fd) return readCallback();
-      if (emit) return readCallback(new Error("Only one read at a time"));
+      if (!file) {
+          return readCallback();
+      }
+      if (emit) {
+          return readCallback(new Error("Only one read at a time"));
+      }
       emit = callback;
+      entry.file(function (file) {
+        var reader = new FileReader();
+        reader.onprogress = function() {
+          console.log('progress:'+ reader.result.length);
+        };
+      });
+      reader.readAsArrayBuffer(); 
   }
   
   function fileAbort(callback) {
@@ -94,7 +104,12 @@ function readStream(path, options, callback) {
 }
 
 function writeStream(path, options, callback) {
-  
+  if (typeof options === "function") {
+    callback = options;
+    options = null;
+  }
+  if (!callback) return writeStream.bind(this, path, options);
+  options = options || {};
 }
 
 function unlink(path, callback) {
